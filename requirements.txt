@@ -6,3 +6,7 @@ plotly==5.17.0
 streamlit-authenticator = "*"
 matplotlib==3.8.0
 pandas==2.1.1
+googletrans==3.1.0-alpha
+newspaper==0.2.8
+nltk==3.7
+requests==2.31.0
