@@ -1,11 +1,13 @@
-import yaml
-import requests
-import yfinance as yf
-import streamlit as st
-from config import api_key
+import pandas as pd
 import plotly.graph_objs as go
-from yaml.loader import SafeLoader
+import requests
+import streamlit as st
+import yaml
+import yfinance as yf
 from streamlit_authenticator import Authenticate
+from yaml.loader import SafeLoader
+
+from config import api_key
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -19,6 +21,33 @@ authenticator = Authenticate(
 )
 
 name, authentication_status, username = authenticator.login('Login', 'main')
+
+def show_main_currencies():
+    vs_currency = 'USD'
+    currencies = ['MXN','AUD','JPY', 'GBP']
+
+    st.subheader("Principales Monedas Globales")
+    exchange_rate = {}
+    bid_price = {}
+    ask_price ={}
+    st.text(f"Moneda de referencia: {vs_currency}")
+    for c in currencies:
+        url = f"https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={c}&to_currency={vs_currency}&apikey={api_key}"
+        r = requests.get(url)
+        data = r.json()
+        data = data['Realtime Currency Exchange Rate']
+        exchange_rate[c] = data['5. Exchange Rate']
+        bid_price[c] = data['8. Bid Price']
+        ask_price[c] = data['9. Ask Price']
+    with st.container():
+        df = pd.DataFrame({
+            'Moneda': currencies,
+            'Tipo de Cambio': exchange_rate.values(),
+            'Compra': bid_price.values(),
+            'Venta': ask_price.values()
+            })
+        st.table(df)
+
 
 if authentication_status is None:
     st.warning('Please enter your username and password')
@@ -38,7 +67,7 @@ if st.session_state["Auth"] == 1:
     start_date = st.date_input("Select starting date to analyze")
     end_date = st.date_input("Select ending date to analyze")
     if len(ticker) == 0 or start_date == end_date:
-        st.error("Stock not available")
+        st.error("Stock not available or date not selected")
         st.stop()
     data = yf.download(ticker, start=start_date, end=end_date)
 
@@ -68,4 +97,6 @@ if st.session_state["Auth"] == 1:
     for i in range(n_news):
         st.write(news_list[i])
         st.write("---")
+
+    show_main_currencies()
 
