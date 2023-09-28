@@ -12,6 +12,7 @@ plotly = "==5.17.0"
 jupyter = "*"
 matplotlib = "*"
 ipywidgets = "*"
+streamlit-authenticator = "*"
 
 [dev-packages]
 
