@@ -7,7 +7,9 @@ import yfinance as yf
 from streamlit_authenticator import Authenticate
 from yaml.loader import SafeLoader
 
-from config import api_key
+from config import a_v_token
+
+st.set_page_config(page_title="Dashboard de Coyuntura económica",layout="wide")
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -22,6 +24,7 @@ authenticator = Authenticate(
 
 name, authentication_status, username = authenticator.login('Login', 'main')
 
+
 def show_main_currencies():
     vs_currency = 'USD'
     currencies = ['MXN','AUD','JPY', 'GBP']
@@ -32,7 +35,7 @@ def show_main_currencies():
     ask_price ={}
     st.text(f"Moneda de referencia: {vs_currency}")
     for c in currencies:
-        url = f"https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={c}&to_currency={vs_currency}&apikey={api_key}"
+        url = f"https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={c}&to_currency={vs_currency}&apikey={a_v_token}"
         r = requests.get(url)
         data = r.json()
         data = data['Realtime Currency Exchange Rate']
@@ -49,20 +52,8 @@ def show_main_currencies():
         st.table(df)
 
 
-if authentication_status is None:
-    st.warning('Please enter your username and password')
-    st.session_state["Auth"] = 0
-elif not authentication_status:
-    st.error('Username/password is incorrect')
-    st.session_state["Auth"] = 0
-elif authentication_status:
-    st.session_state["Auth"] = 1
-    with st.sidebar:
-        authenticator.logout('Logout', 'main')
-
-if st.session_state["Auth"] == 1:
-    st.title("Analysis of economic situation by stock")
-
+# -------- DEJÉ LA INFO QUE TENÍAMOS DENTRO DE ESTA FUNCIÓN PARA NO BORRARLA (Momentáneamente)
+def data():
     ticker = st.text_input("Select your Ticker: ")
     start_date = st.date_input("Select starting date to analyze")
     end_date = st.date_input("Select ending date to analyze")
@@ -89,7 +80,7 @@ if st.session_state["Auth"] == 1:
     n_news = st.number_input("Select the number of news", 0, 5, 3)
     # NEWS
     url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={ticker}&" \
-          f"time_from={st_date.replace('-', '') + 'T0000'}&limit=3&sort=RELEVANCE&apikey={api_key}"
+          f"time_from={st_date.replace('-', '') + 'T0000'}&limit=3&sort=RELEVANCE&apikey={a_v_token}"
     r = requests.get(url)
     data = r.json()
     st.subheader("News")
@@ -99,4 +90,66 @@ if st.session_state["Auth"] == 1:
         st.write("---")
 
     show_main_currencies()
+
+
+if authentication_status is None:
+    st.warning('Please enter your username and password')
+    st.session_state["Auth"] = 0
+elif not authentication_status:
+    st.error('Username/password is incorrect')
+    st.session_state["Auth"] = 0
+elif authentication_status:
+    st.session_state["Auth"] = 1
+
+if st.session_state["Auth"] == 1:
+
+    # --- Titulo
+
+    st.markdown("<h1 style='text-align: center;'> Analysis of economic situation by stock</h1>", unsafe_allow_html=True)
+
+    # Creamos un contenedor que tendrá todo el dashboard
+    contenedor = st.empty()
+
+    # Almacenamos adentro del contenedor.
+    with contenedor.container():
+
+        # --- Primer fila dashboard (Indexes)
+        inx_1, inx_2, inx_3 = st.columns(3)
+
+        with inx_1:
+            st.write("<h2 style='text-align: center;'> Main index 1</h2>", unsafe_allow_html=True)
+
+        with inx_2:
+            st.write("<h2 style='text-align: center;'> Main index 2 </h2>", unsafe_allow_html=True)
+        with inx_3:
+            st.write("<h2 style='text-align: center;'>Main index 3</h2>", unsafe_allow_html=True)
+
+        # --- Segunda fila (Noticias, currencies y stock watchlist)
+        main_news, secondary_news, global_currencies, stock_watchlist = st.columns(4)
+
+        with main_news:
+            st.write("<h2 style='text-align: center;'> Main News</h2>", unsafe_allow_html=True)
+
+        with secondary_news:
+            st.write("<h2 style='text-align: center;'> Secundary News 1</h2>", unsafe_allow_html=True)
+            st.write("<h2 style='text-align: center;'> Secundary News 2</h2>", unsafe_allow_html=True)
+            st.write("<h2 style='text-align: center;'> Secundary News 3</h2>", unsafe_allow_html=True)
+
+        with global_currencies:
+            st.write("<h2 style='text-align: center;'> Main global currencies</h2>", unsafe_allow_html=True)
+
+        with stock_watchlist:
+            st.write("<h2 style='text-align: center;'> Personalized stick watchlist</h2>", unsafe_allow_html=True)
+
+        # ----- Tercer fila (Stocks, news, cetes)
+        stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
+
+        with stocks_graphs:
+            st.write("<h2 style='text-align: center;'> Stock graphs with different filters</h2>", unsafe_allow_html=True)
+
+        with display_news_stock:
+            st.write("<h2 style='text-align: center;'> Display news of stock</h2>", unsafe_allow_html=True)
+
+        with cetes_plot:
+            st.write("<h2 style='text-align: center;'> Calculator Cetes plot</h2>", unsafe_allow_html=True)
 
