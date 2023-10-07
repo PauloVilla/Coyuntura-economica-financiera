@@ -4,7 +4,6 @@ import requests
 import streamlit as st
 import yaml
 import yfinance as yf
-from streamlit_authenticator import Authenticate
 from yaml.loader import SafeLoader
 
 from config import a_v_token
@@ -13,16 +12,6 @@ st.set_page_config(page_title="Dashboard de Coyuntura económica",layout="wide")
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
-
-authenticator = Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days'],
-    config['preauthorized']
-)
-
-name, authentication_status, username = authenticator.login('Login', 'main')
 
 
 def show_main_currencies():
@@ -92,64 +81,53 @@ def data():
     show_main_currencies()
 
 
-if authentication_status is None:
-    st.warning('Please enter your username and password')
-    st.session_state["Auth"] = 0
-elif not authentication_status:
-    st.error('Username/password is incorrect')
-    st.session_state["Auth"] = 0
-elif authentication_status:
-    st.session_state["Auth"] = 1
+# --- Titulo
 
-if st.session_state["Auth"] == 1:
+st.markdown("<h1 style='text-align: center;'> Analysis of economic situation by stock</h1>", unsafe_allow_html=True)
 
-    # --- Titulo
+# Creamos un contenedor que tendrá todo el dashboard
+contenedor = st.empty()
 
-    st.markdown("<h1 style='text-align: center;'> Analysis of economic situation by stock</h1>", unsafe_allow_html=True)
+# Almacenamos adentro del contenedor.
+with contenedor.container():
 
-    # Creamos un contenedor que tendrá todo el dashboard
-    contenedor = st.empty()
+    # --- Primer fila dashboard (Indexes)
+    inx_1, inx_2, inx_3 = st.columns(3)
 
-    # Almacenamos adentro del contenedor.
-    with contenedor.container():
+    with inx_1:
+        st.header("Índice 1")
+    with inx_2:
+        st.header("Índice 2")
+    with inx_3:
+        st.header("Índice 3")
 
-        # --- Primer fila dashboard (Indexes)
-        inx_1, inx_2, inx_3 = st.columns(3)
+    # --- Segunda fila (Noticias, currencies y stock watchlist)
+    main_news, secondary_news, global_currencies, stock_watchlist = st.columns(4)
 
-        with inx_1:
-            st.header("Main Index 1")
-        with inx_2:
-            st.header("Main Index 2")
-        with inx_3:
-            st.header("Main Index 3")
+    with main_news:
+        st.header("Main News")
 
-        # --- Segunda fila (Noticias, currencies y stock watchlist)
-        main_news, secondary_news, global_currencies, stock_watchlist = st.columns(4)
-
-        with main_news:
-            st.header("Main News")
-
-        with secondary_news:
-            st.header("Secondary News 1")
-            st.header("Secondary News 2")
-            st.header("Secondary News 3")
+    with secondary_news:
+        st.header("Secondary News 1")
+        st.header("Secondary News 2")
+        st.header("Secondary News 3")
 
 
-        with global_currencies:
-            st.header("Main Global Currencies")
+    with global_currencies:
+        st.header("Main Global Currencies")
 
-        with stock_watchlist:
-            st.header("Personalized stock watchlist")
+    with stock_watchlist:
+        st.header("Personalized stock watchlist")
 
-        # ----- Tercer fila (Stocks, news, cetes)
-        stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
+    # ----- Tercer fila (Stocks, news, cetes)
+    stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
 
-        with stocks_graphs:
-            st.header("Stock graphs with different filters")
+    with stocks_graphs:
+        st.header("Stock graphs with different filters")
 
-        with display_news_stock:
-            st.header("Selected Stock News")
+    with display_news_stock:
+        st.header("Selected Stock News")
 
-        with cetes_plot:
-            st.header("Calculator Cetes plot")
+    with cetes_plot:
+        st.header("Calculator Cetes plot")
 
