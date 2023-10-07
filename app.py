@@ -6,6 +6,7 @@ import yaml
 import yfinance as yf
 from yaml.loader import SafeLoader
 
+import data_sources
 from config import a_v_token
 
 st.set_page_config(page_title="Dashboard de Coyuntura económica",layout="wide")
@@ -83,7 +84,7 @@ def data():
 
 # --- Titulo
 
-st.markdown("<h1 style='text-align: center;'> Analysis of economic situation by stock</h1>", unsafe_allow_html=True)
+st.title("Análisis de Situación Económica")
 
 # Creamos un contenedor que tendrá todo el dashboard
 contenedor = st.empty()
@@ -95,11 +96,14 @@ with contenedor.container():
     inx_1, inx_2, inx_3 = st.columns(3)
 
     with inx_1:
-        st.header("Índice 1")
+        st.header("S&P 500 (^GSPC)")
+        st.plotly_chart(data_sources.get_main_index_data("^GSPC"), use_container_width=True)
     with inx_2:
-        st.header("Índice 2")
+        st.header("NASDAQ100 (^NDX)")
+        st.plotly_chart(data_sources.get_main_index_data("^NDX"), use_container_width=True)
     with inx_3:
-        st.header("Índice 3")
+        st.header("IPC (^MXX)")
+        st.plotly_chart(data_sources.get_main_index_data("^MXX"), use_container_width=True)
 
     # --- Segunda fila (Noticias, currencies y stock watchlist)
     main_news, secondary_news, global_currencies, stock_watchlist = st.columns(4)
