@@ -15,6 +15,7 @@ ipywidgets = "*"
 streamlit-authenticator = "*"
 googletrans = "*"
 nltk = "*"
+newspaper3k = "*"
 
 [dev-packages]
 
