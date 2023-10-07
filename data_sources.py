@@ -1,14 +1,16 @@
 import warnings
 from datetime import datetime, timedelta
 
+import nltk
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import requests
+import streamlit as st
 import yfinance as yf
-from ipywidgets import interact
 from googletrans import Translator
-translator = Translator()
+from ipywidgets import interact
+from newspaper import Article
 
 from cetes import Cetes
 from config import a_v_token  # archivo de python con el api key de alpha vantage
@@ -31,7 +33,42 @@ def get_main_index_data(ticker, color):
     )
     return fig
 
+@st.cache_data
+def get_main_news(topics, number_of_articles):
+    topic = ','.join(topics)
 
+    url = f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&topics={topic}&sort=RELEVANCE&apikey={a_v_token}'
+    r = requests.get(url)
+    data = r.json()
+
+    # Obtener las ligas
+    links = [[data['feed'][i]['url'], data['feed'][i]['title']] for i in range(int(data['items']))]
+
+    news_summaries = {}
+    pending_articles = number_of_articles
+    while len(news_summaries.keys()) < pending_articles:
+        try:
+            link = []
+            for new in range(number_of_articles):
+                link = links.pop()
+                news_summaries[link[0]] = {"title": _translate(link[1]), "body": _translate(_get_article_summary(link[0]))}
+        except:
+            print(f"Error parsing article {link[0]}")
+        pending_articles = number_of_articles - len(news_summaries.keys())
+
+    return news_summaries
+
+def _translate(text):
+    translator = Translator()
+    return translator.translate(text , dest ='es').text
+
+def _get_article_summary(link):
+    # Web Scrapping 
+    article = Article(link)
+    article.download()
+    article.parse()
+    article.nlp()
+    return article.summary
 # moving this from the main app.py
 
 # def show_main_currencies():

@@ -11,6 +11,24 @@ from yaml.loader import SafeLoader
 import data_sources
 from config import a_v_token
 
+NewsTopics = {
+    "Blockchain": "blockchain",
+    "Earnings": "earnings",
+    "IPO":"ipo",
+    "Mergers_and_Acquisitions": "mergers_and_acquisitions",
+    "Financial_Markets": "financial_markets",
+    "Economy_Fiscal_Policy": "economy_fiscal",
+    "Economy_Monetary_Policy": "economy_monetary",
+    "Economy_Macro_Overall": "economy_macro",
+    "Energy_and_Transportation": "energy_transportation",
+    "Finance": "finance",
+    "Life_Sciences": "life_sciences",
+    "Manufacturing": "manufacturing",
+    "Real_Estate_and_Construction": "real_estate",
+    "Retail_and_Wholesale": "retail_wholesale",
+    "Technology": "technology"
+}
+
 st.set_page_config(page_title="Dashboard de Coyuntura económica",layout="wide")
 
 with open('config.yaml') as file:
@@ -48,13 +66,21 @@ with contenedor.container():
     # --- Segunda fila (Noticias, currencies y stock watchlist)
     main_news, secondary_news, global_currencies, stock_watchlist = st.columns(4)
 
+    news = data_sources.get_main_news([NewsTopics["IPO"], NewsTopics["Technology"]],4)
     with main_news:
         st.header("Noticias Principales")
 
+        for url, article in news.items():
+            st.markdown(f"#### [{article['title']}]({url})")
+            st.markdown(f"{article['body'][:240]}...")
+            del news[url]
+            break
+
     with secondary_news:
-        st.subheader("Noticia Secundaria 1")
-        st.subheader("Noticia Secundaria 2")
-        st.subheader("Noticia Secundaria 3")
+        st.header(" ")
+        for url, article in news.items():
+            st.markdown(f"##### [{article['title']}]({url})")
+            st.markdown(f"{article['body'][:240]}...")
 
 
     with global_currencies:
