@@ -37,7 +37,9 @@ with open('config.yaml') as file:
 def generate_random_color():
     color = random.randrange(0, 2**24)
     hex_color = hex(color)
-    return "#" + hex_color[2:]
+    hex_color = hex_color[2:]
+
+    return "#" + hex_color.zfill(6)
 
 
 SELECTED_STOCK = 'AAPL'
