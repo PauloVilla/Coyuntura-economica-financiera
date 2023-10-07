@@ -105,29 +105,29 @@ with contenedor.container():
     main_news, secondary_news, global_currencies, stock_watchlist = st.columns(4)
 
     with main_news:
-        st.header("Main News")
+        st.header("Noticias Principales")
 
     with secondary_news:
-        st.header("Secondary News 1")
-        st.header("Secondary News 2")
-        st.header("Secondary News 3")
+        st.subheader("Noticia Secundaria 1")
+        st.subheader("Noticia Secundaria 2")
+        st.subheader("Noticia Secundaria 3")
 
 
     with global_currencies:
-        st.header("Main Global Currencies")
+        st.header("Principales Monedas vs USD")
 
     with stock_watchlist:
-        st.header("Personalized stock watchlist")
+        st.header("Lista Personalizada de Stocks")
 
     # ----- Tercer fila (Stocks, news, cetes)
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
 
     with stocks_graphs:
-        st.header("Stock graphs with different filters")
+        st.header("Stock Seleccionado")
 
     with display_news_stock:
-        st.header("Selected Stock News")
+        st.header("Noticias de Stock Seleccionado")
 
     with cetes_plot:
-        st.header("Calculator Cetes plot")
+        st.header("Grafica Histórica de Cetes")
 
