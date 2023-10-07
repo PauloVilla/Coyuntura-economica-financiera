@@ -7,6 +7,8 @@ import plotly.graph_objects as go
 import requests
 import yfinance as yf
 from ipywidgets import interact
+from googletrans import Translator
+translator = Translator()
 
 from cetes import Cetes
 from config import a_v_token  # archivo de python con el api key de alpha vantage

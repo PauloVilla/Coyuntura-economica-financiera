@@ -13,6 +13,7 @@ jupyter = "*"
 matplotlib = "*"
 ipywidgets = "*"
 streamlit-authenticator = "*"
+googletrans = "*"
 
 [dev-packages]
 
