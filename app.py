@@ -40,6 +40,7 @@ def generate_random_color():
     return "#" + hex_color[2:]
 
 
+SELECTED_STOCK = 'AAPL'
 # --- Titulo
 
 st.title("Análisis de Situación Económica")
@@ -84,16 +85,19 @@ with contenedor.container():
 
 
     with global_currencies:
-        st.header("Principales Monedas vs USD")
+        st.header("Principales Monedas")
+        st.dataframe(data_sources.get_global_currencies(), hide_index=True, use_container_width=True)
 
     with stock_watchlist:
         st.header("Lista Personalizada de Stocks")
+        st.dataframe(data_sources.get_personalized_stock_list(['IBM', 'TSLA', 'AAPL', 'PLTR']), hide_index=True, use_container_width=True)
 
     # ----- Tercer fila (Stocks, news, cetes)
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
 
     with stocks_graphs:
-        st.header("Stock Seleccionado")
+        st.header(f"Stock Seleccionado: {SELECTED_STOCK}")
+        st.plotly_chart(data_sources.get_selected_stock(SELECTED_STOCK, generate_random_color()), use_container_width=True)
 
     with display_news_stock:
         st.header("Noticias de Stock Seleccionado")
