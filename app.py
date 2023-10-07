@@ -104,4 +104,5 @@ with contenedor.container():
 
     with cetes_plot:
         st.header("Grafica Histórica de Cetes")
+        st.plotly_chart(data_sources.get_cetes_graph("28", generate_random_color()), use_container_width=True)
 

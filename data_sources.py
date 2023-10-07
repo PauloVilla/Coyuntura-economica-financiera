@@ -1,3 +1,4 @@
+import datetime as dt
 import warnings
 from datetime import datetime, timedelta
 
@@ -159,6 +160,33 @@ def get_selected_stock(stock, graph_color):
     )
 
     return fig
+
+@st.cache_data
+def get_cetes_graph(term, graph_color):
+    cetes = Cetes(term)
+    start_date='1995-01-01'
+    end_date=str(dt.date.today())
+    data = cetes.get_data(date_end=end_date, date_start=start_date)
+
+    # Convierte la columna "date" a tipo datetime si no está en ese formato
+    data['date'] = pd.to_datetime(data['date'])
+
+    # Crea la figura de la gráfica de barras
+    fig = go.Figure()
+
+    # Agrega las barras a la figura
+    fig.add_trace(go.Scatter(
+        x=data['date'],
+        y=data['value'],
+        marker_color=graph_color))
+
+    # Configuración del estilo de la gráfica
+    fig.update_layout(
+        xaxis_title='Fecha',
+        yaxis_title='Valor',
+        title=f'Gráfica de barras para Cetes {term}')
+    return fig
+
 
 # moving this from the main app.py
 
