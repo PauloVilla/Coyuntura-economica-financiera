@@ -103,6 +103,10 @@ with contenedor.container():
 
     with display_news_stock:
         st.header("Noticias de Stock Seleccionado")
+        news = data_sources.get_selected_stock_news(SELECTED_STOCK, 3)
+        for url, article in news.items():
+            st.markdown(f"##### [{article['title']}]({url})")
+            st.markdown(f"{article['body'][:240]}...")
 
     with cetes_plot:
         st.header("Grafica Histórica de Cetes")
