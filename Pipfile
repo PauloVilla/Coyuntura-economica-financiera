@@ -14,6 +14,7 @@ matplotlib = "*"
 ipywidgets = "*"
 streamlit-authenticator = "*"
 googletrans = "*"
+nltk = "*"
 
 [dev-packages]
 
