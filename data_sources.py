@@ -27,8 +27,4 @@ def get_main_index_data(ticker):
         yaxis_title="Precio",
         template="plotly" 
     )
-
-    
     return fig
-
-    # fig.show()
