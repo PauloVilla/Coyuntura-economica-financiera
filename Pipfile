@@ -13,9 +13,10 @@ jupyter = "*"
 matplotlib = "*"
 ipywidgets = "*"
 streamlit-authenticator = "*"
-googletrans = "*"
 nltk = "*"
 newspaper3k = "*"
+watchdog = "*"
+googletrans = "==4.0.0-rc1"
 
 [dev-packages]
 

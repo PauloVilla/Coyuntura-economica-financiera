@@ -12,5 +12,5 @@ nltk==3.7
 requests==2.31.0
 matplotlib==3.8.0
 ipywidgets==8.1.1
-googletrans==3.0.0
+googletrans==4.0.0rc1
 nltk==3.8.1
