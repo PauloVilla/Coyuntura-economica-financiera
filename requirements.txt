@@ -14,3 +14,6 @@ matplotlib==3.8.0
 ipywidgets==8.1.1
 googletrans==4.0.0rc1
 nltk==3.8.1
+protobuf==3.20.*
+transformers==4.33.1
+
