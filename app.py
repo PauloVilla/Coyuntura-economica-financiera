@@ -1,15 +1,17 @@
-import random
-
-import pandas as pd
-import plotly.graph_objs as go
-import requests
-import streamlit as st
 import yaml
+import random
+import requests
+import pandas as pd
 import yfinance as yf
+import streamlit as st
+import plotly.graph_objs as go
 from yaml.loader import SafeLoader
 
 import data_sources
 from config import a_v_token
+
+from transformers import pipeline
+sentiment_pipeline = pipeline("sentiment-analysis")
 
 NewsTopics = {
     "Blockchain": "blockchain",
@@ -69,15 +71,22 @@ with contenedor.container():
     # --- Segunda fila (Noticias, currencies y stock watchlist)
     main_news, secondary_news, global_currencies, stock_watchlist = st.columns(4)
 
-    news = data_sources.get_main_news([NewsTopics["IPO"], NewsTopics["Technology"]],4)
+    news = data_sources.get_main_news([NewsTopics["IPO"], NewsTopics["Technology"]], 4)
     with main_news:
         st.header("Noticias Principales")
 
         for url, article in news.items():
             st.markdown(f"#### [{article['title']}]({url})")
-            st.markdown(f"{article['body'][:240]}...")
+            text = article['body'][:240]
+            st.markdown(f"{text}...")
             del news[url]
             break
+
+        for summary in range(len(sentiment_pipeline(text))):
+            if sentiment_pipeline(text)[summary]['label'] == 'POSITIVE':
+                st.write(":grinning:")
+            else:
+                st.write("# :disappointed:")
 
     with secondary_news:
         st.header(" ")
@@ -85,14 +94,14 @@ with contenedor.container():
             st.markdown(f"##### [{article['title']}]({url})")
             st.markdown(f"{article['body'][:240]}...")
 
-
     with global_currencies:
         st.header("Principales Monedas")
         st.dataframe(data_sources.get_global_currencies(), hide_index=True, use_container_width=True)
 
     with stock_watchlist:
         st.header("Lista Personalizada de Stocks")
-        st.dataframe(data_sources.get_personalized_stock_list(['IBM', 'TSLA', 'AAPL', 'PLTR']), hide_index=True, use_container_width=True)
+        # st.dataframe(data_sources.get_personalized_stock_list(['IBM', 'TSLA', 'AAPL', 'PLTR']),
+        # hide_index=True, use_container_width=True)
 
     # ----- Tercer fila (Stocks, news, cetes)
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
