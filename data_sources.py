@@ -136,18 +136,15 @@ def get_personalized_stock_list(stocks):
     change_percent = {}
 
     for t in stocks:
-        url = f'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={t}&apikey={a_v_token}'
-        r = requests.get(url)
-        data = r.json()
-        data = data['Global Quote']
-        open[t] = data['02. open']
-        high[t] = data['03. high']
-        low[t] = data['04. low']
-        price[t] = data['05. price']
-        volume[t] = data['06. volume']
-        previous_close[t] = data['08. previous close']
-        change[t] = data['09. change']
-        change_percent[t] = data['10. change percent']
+        data = yf.download(t, end_date, end_date, progress=False)
+        import pdb
+        pdb.set_trace()
+
+        open[t] = data['Open'].values[0]
+        high[t] = data['High'].values[0]
+        low[t] = data['Low'].values[0]
+        price[t] = data['Close'].values[0]
+        volume[t] = data['Volume'].values[0]
 
     df = pd.DataFrame({
         'Ticker': stocks,
@@ -155,16 +152,8 @@ def get_personalized_stock_list(stocks):
         'Alta': high.values(),
         'Baja': low.values(),
         'Precio': price.values(),
-        'Volumen': volume.values(),
-        'Precio al Ultimo Cierre': previous_close.values(),
-        'Cambio': change.values(),
-        'Porcentaje de Cambio': change_percent.values()
+        'Volumen': volume.values()
     })
-    possible_choices = [col for col in df.columns if col !=
-                        'Ticker' and col != 'Porcentaje de Cambio']
-    df[possible_choices] = df[possible_choices].astype(float)
-    df['Porcentaje de Cambio'] = df['Porcentaje de Cambio'].str[:-
-                                                                1].astype(float)
     return df
 
 
