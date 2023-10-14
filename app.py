@@ -14,7 +14,7 @@ from config import a_v_token
 NewsTopics = {
     "Blockchain": "blockchain",
     "Earnings": "earnings",
-    "IPO":"ipo",
+    "IPO": "ipo",
     "Mergers_and_Acquisitions": "mergers_and_acquisitions",
     "Financial_Markets": "financial_markets",
     "Economy_Fiscal_Policy": "economy_fiscal",
@@ -29,10 +29,12 @@ NewsTopics = {
     "Technology": "technology"
 }
 
-st.set_page_config(page_title="Dashboard de Coyuntura económica",layout="wide")
+st.set_page_config(
+    page_title="Dashboard de Coyuntura económica", layout="wide")
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
+
 
 def generate_random_color():
     color = random.randrange(0, 2**24)
@@ -58,55 +60,51 @@ with contenedor.container():
 
     with inx_1:
         st.header("S&P 500 (^GSPC)")
-        st.plotly_chart(data_sources.get_main_index_data("^GSPC", generate_random_color()), use_container_width=True)
+        st.plotly_chart(data_sources.get_main_index_data(
+            "^GSPC", generate_random_color()), use_container_width=True)
     with inx_2:
         st.header("NASDAQ100 (^NDX)")
-        st.plotly_chart(data_sources.get_main_index_data("^NDX", generate_random_color()), use_container_width=True)
+        st.plotly_chart(data_sources.get_main_index_data(
+            "^NDX", generate_random_color()), use_container_width=True)
     with inx_3:
         st.header("IPC (^MXX)")
-        st.plotly_chart(data_sources.get_main_index_data("^MXX", generate_random_color()), use_container_width=True)
+        st.plotly_chart(data_sources.get_main_index_data(
+            "^MXX", generate_random_color()), use_container_width=True)
 
     # --- Segunda fila (Noticias, currencies y stock watchlist)
-    main_news, secondary_news, global_currencies, stock_watchlist = st.columns(4)
+    main_news, global_currencies, stock_watchlist = st.columns(3)
 
-    news = data_sources.get_main_news([NewsTopics["IPO"], NewsTopics["Technology"]], 4)
+    news = data_sources.get_main_news(
+        [NewsTopics["IPO"], NewsTopics["Technology"]], 5)
     with main_news:
-        st.header("Noticias Principales")
-
+        st.header("Principales Noticias")
+        print(f"Printing {len(news.items())}")
         for url, article in news.items():
             st.markdown(f"#### [{article['title']}]({url})")
             text = article['body'][:240]
             st.markdown(f"{text}...")
-            del news[url]
-            break
-
-        for summary in range(len(sentiment_pipeline(text))):
-            if sentiment_pipeline(text)[summary]['label'] == 'POSITIVE':
-                st.write(":grinning:")
+            if article['sentiment'] == 'POSITIVE':
+                st.write("# :grinning:")
             else:
                 st.write("# :disappointed:")
 
-    with secondary_news:
-        st.header(" ")
-        for url, article in news.items():
-            st.markdown(f"##### [{article['title']}]({url})")
-            st.markdown(f"{article['body'][:240]}...")
-
     with global_currencies:
         st.header("Principales Monedas")
-        st.dataframe(data_sources.get_global_currencies(), hide_index=True, use_container_width=True)
+        st.dataframe(data_sources.get_global_currencies(),
+                     hide_index=True, use_container_width=True)
 
     with stock_watchlist:
         st.header("Lista Personalizada de Stocks")
         st.dataframe(data_sources.get_personalized_stock_list(['IBM', 'TSLA', 'AAPL', 'PLTR']),
-            hide_index=True, use_container_width=True)
+                     hide_index=True, use_container_width=True)
 
     # ----- Tercer fila (Stocks, news, cetes)
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
 
     with stocks_graphs:
         st.header(f"Stock Seleccionado: {SELECTED_STOCK}")
-        st.plotly_chart(data_sources.get_selected_stock(SELECTED_STOCK, generate_random_color()), use_container_width=True)
+        st.plotly_chart(data_sources.get_selected_stock(
+            SELECTED_STOCK, generate_random_color()), use_container_width=True)
 
     with display_news_stock:
         st.header("Noticias de Stock Seleccionado")
@@ -117,5 +115,5 @@ with contenedor.container():
 
     with cetes_plot:
         st.header("Grafica Histórica de Cetes")
-        st.plotly_chart(data_sources.get_cetes_graph("28", generate_random_color()), use_container_width=True)
-
+        st.plotly_chart(data_sources.get_cetes_graph(
+            "28", generate_random_color()), use_container_width=True)
