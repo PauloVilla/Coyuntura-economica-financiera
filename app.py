@@ -101,8 +101,8 @@ with contenedor.container():
 
     with stock_watchlist:
         st.header("Lista Personalizada de Stocks")
-        # st.dataframe(data_sources.get_personalized_stock_list(['IBM', 'TSLA', 'AAPL', 'PLTR']),
-        # hide_index=True, use_container_width=True)
+        st.dataframe(data_sources.get_personalized_stock_list(['IBM', 'TSLA', 'AAPL', 'PLTR']),
+            hide_index=True, use_container_width=True)
 
     # ----- Tercer fila (Stocks, news, cetes)
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
