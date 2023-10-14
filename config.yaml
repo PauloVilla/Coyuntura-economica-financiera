@@ -1,12 +1,9 @@
 credentials:
   usernames:
-    Equipo4:
-      name: Equipo 4 PAP
+    Equipo2:
+      name: Equipo 2 PAP
       password: $2b$12$7PYjUSneyRULDy1/MMsL0uLJ8dffFFTCRxIxjItW/CWt7kst/nYLy
 cookie:
   expiry_days: 0
   key: random_signature_key
   name: random_cookie_name
-preauthorized:
-  emails:
-  - melsby@gmail.com
