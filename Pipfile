@@ -22,6 +22,7 @@ install = "*"
 torch = "*"
 torchvision = "*"
 torchaudio = "*"
+streamlit-extras = "*"
 
 [dev-packages]
 

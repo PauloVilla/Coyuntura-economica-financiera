@@ -16,4 +16,4 @@ googletrans==4.0.0rc1
 nltk==3.8.1
 protobuf==3.20.*
 transformers==4.33.1
-
+extra-streamlit-components==0.1.60
