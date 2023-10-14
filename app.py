@@ -72,21 +72,20 @@ with contenedor.container():
             "^MXX", generate_random_color()), use_container_width=True)
 
     # --- Segunda fila (Noticias, currencies y stock watchlist)
-    main_news, global_currencies, stock_watchlist = st.columns(3)
+    st.write("## Principales Noticias")
+    cols = st.columns(4)
 
     news = data_sources.get_main_news(
-        [NewsTopics["IPO"], NewsTopics["Technology"]], 5)
-    with main_news:
-        st.header("Principales Noticias")
-        print(f"Printing {len(news.items())}")
-        for url, article in news.items():
-            st.markdown(f"#### [{article['title']}]({url})")
-            text = article['body'][:240]
-            st.markdown(f"{text}...")
-            if article['sentiment'] == 'POSITIVE':
-                st.write("# :grinning:")
-            else:
-                st.write("# :disappointed:")
+        [NewsTopics["IPO"], NewsTopics["Technology"]], 4)
+
+    for url, article in news.items():
+        column = cols.pop()
+        with column:
+            st.markdown(f"#### [{article['title'][:70]}...]({url})  " + (
+                ":grinning:" if article['sentiment'] == 'POSITIVE' else ":disappointed:"))
+            text = article['body'][:140]
+            st.markdown(f"{text}... ")
+    global_currencies, stock_watchlist = st.columns(2)
 
     with global_currencies:
         st.header("Principales Monedas")
@@ -108,10 +107,11 @@ with contenedor.container():
 
     with display_news_stock:
         st.header("Noticias de Stock Seleccionado")
-        news = data_sources.get_selected_stock_news(SELECTED_STOCK, 3)
+        news = data_sources.get_selected_stock_news(SELECTED_STOCK, 2)
         for url, article in news.items():
-            st.markdown(f"##### [{article['title']}]({url})")
-            st.markdown(f"{article['body'][:240]}...")
+            st.markdown(f"##### [{article['title'][:70]}...]({url}) " + (
+                ":grinning:" if article['sentiment'] == 'POSITIVE' else ":disappointed:"))
+            st.markdown(f"{article['body'][:140]}...")
 
     with cetes_plot:
         st.header("Grafica Histórica de Cetes")
