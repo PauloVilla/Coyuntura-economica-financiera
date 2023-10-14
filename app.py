@@ -1,16 +1,17 @@
-import yaml
 import random
-import requests
+
 import pandas as pd
-import yfinance as yf
-import streamlit as st
 import plotly.graph_objs as go
+import requests
+import streamlit as st
+import yaml
+import yfinance as yf
+from transformers import pipeline
 from yaml.loader import SafeLoader
 
 import data_sources
 from config import a_v_token
 
-from transformers import pipeline
 sentiment_pipeline = pipeline("sentiment-analysis")
 
 NewsTopics = {

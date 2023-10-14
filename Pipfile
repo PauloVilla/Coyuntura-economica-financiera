@@ -17,6 +17,11 @@ nltk = "*"
 newspaper3k = "*"
 watchdog = "*"
 googletrans = "==4.0.0-rc1"
+transformers = "*"
+install = "*"
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
 
 [dev-packages]
 
