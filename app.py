@@ -6,13 +6,10 @@ import requests
 import streamlit as st
 import yaml
 import yfinance as yf
-from transformers import pipeline
 from yaml.loader import SafeLoader
 
 import data_sources
 from config import a_v_token
-
-sentiment_pipeline = pipeline("sentiment-analysis")
 
 NewsTopics = {
     "Blockchain": "blockchain",

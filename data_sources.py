@@ -12,10 +12,12 @@ import yfinance as yf
 from googletrans import Translator
 from ipywidgets import interact
 from newspaper import Article
+from transformers import pipeline
 
 from cetes import Cetes
 from config import a_v_token  # archivo de python con el api key de alpha vantage
 
+sentiment_pipeline = pipeline("sentiment-analysis")
 st_date = datetime(datetime.now().year, 1, 1)
 end_date = datetime.now()
 
@@ -50,15 +52,25 @@ def parse_news(data, number_of_articles):
 
     news_summaries = {}
     pending_articles = number_of_articles
-    while len(news_summaries.keys()) < pending_articles:
+    while len(news_summaries.keys()) < number_of_articles:
         try:
             link = []
-            for new in range(number_of_articles):
-                link = links.pop()
-                news_summaries[link[0]] = {"title": _translate(link[1]), "body": _translate(_get_article_summary(link[0]))}
+            link = links.pop()
+            title = _translate(link[1])
+            body = _translate(_get_article_summary(link[0]))
+            sentiment_analysis = sentiment_pipeline(link[1])
+            print(sentiment_analysis)
+            sentiment_analysis = sentiment_analysis.pop()
+            print(f"Sentiment Analysis for {link[0]}: \n{sentiment_analysis}")
+            news_summaries[link[0]] = {
+                "title": title, 
+                "body": body,
+                "sentiment": sentiment_analysis["label"]
+            }
         except:
             print(f"Error parsing article {link[0]}")
         pending_articles = number_of_articles - len(news_summaries.keys())
+        print(f"Pending articles: {pending_articles}")
 
     return news_summaries
 
