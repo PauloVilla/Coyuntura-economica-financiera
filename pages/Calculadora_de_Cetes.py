@@ -2,10 +2,19 @@ import streamlit as st
 
 from cetes_calculator import calculo_cetes
 
-st.me(page_title="Calculadora de Cetes")
+number_input = None
 
-df = calculo_cetes(10000000, 28)
 
-df.add(calculo_cetes(1000000, 91))
+def cambio_capital(key):
+    try:
+        capital = float(st.session_state[key])
+    except:
+        st.write("Formato inválido.")
+    table = st.table(calculo_cetes(
+        capital, [28, 91, 182, 364]))
 
-st.write(df)
+
+number_input = st.text_input(
+    "Capital Inicial", placeholder="Entrar una cantidad", key="capital_cetes",  on_change=cambio_capital, args=("capital_cetes",))
+
+table_placeholder = st.container()
