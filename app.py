@@ -93,7 +93,7 @@ with contenedor.container():
                      hide_index=True, use_container_width=True)
 
     with stock_watchlist:
-        st.header("Lista Personalizada de Stocks")
+        st.header("Stocks")
         st.dataframe(data_sources.get_personalized_stock_list(['IBM', 'TSLA', 'AAPL', 'PLTR']),
                      hide_index=True, use_container_width=True)
 

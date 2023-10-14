@@ -108,11 +108,11 @@ def get_global_currencies():
     for c in currencies:
         currency = yf.Ticker(f"{c}{vs_currency}=X")
         data = currency.info
-        currency_names.append(f"{vs_currency}/{c}")
+        currency_names.append(f"{c}/{vs_currency}")
         exchange_rate[c] = data['open']
         bid_price[c] = data['bid']
         ask_price[c] = data['ask']
-        variance[c] = data['previousClose'] / data['open'] - 1
+        variance[c] = data['open'] / data['previousClose'] - 1
 
     df = pd.DataFrame({
         'Moneda': currency_names,
@@ -214,3 +214,18 @@ def get_selected_stock_news(stock, number_of_articles):
     r = requests.get(url)
     data = r.json()
     return parse_news(data, number_of_articles)
+
+
+def get_stock_performance(ticker, start_date, end_date):
+    # Fetch stock data
+    stock_data = yf.download(ticker, start=start_date, end=end_date)
+
+    if stock_data.empty:
+        return "No data available for this period."
+
+    # Calculate performance
+    initial_price = stock_data['Adj Close'].iloc[0]
+    final_price = stock_data['Adj Close'].iloc[-1]
+    performance = ((final_price - initial_price) / initial_price) * 100
+
+    return performance
