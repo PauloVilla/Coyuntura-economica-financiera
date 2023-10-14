@@ -10,6 +10,7 @@ def cambio_capital(key):
         capital = float(st.session_state[key])
     except:
         st.write("Formato inválido.")
+        return
     table = st.table(calculo_cetes(
         capital, [28, 91, 182, 364]))
 
