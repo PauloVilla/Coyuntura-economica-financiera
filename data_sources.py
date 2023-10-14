@@ -192,7 +192,7 @@ def get_selected_stock(stock, graph_color):
 @st.cache_data
 def get_cetes_graph(term, graph_color):
     cetes = Cetes(term)
-    start_date = '2000-01-01'
+    start_date = '2010-01-01'
     end_date = str(dt.date.today())
     data = cetes.get_data(date_end=end_date, date_start=start_date)
 
