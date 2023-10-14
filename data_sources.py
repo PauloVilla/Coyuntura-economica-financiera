@@ -95,6 +95,7 @@ def _get_article_summary(link):
 
 @st.cache_data
 def get_global_currencies():
+
     vs_currency = 'MXN'
     currencies = ['USD', 'AUD', 'JPY', 'GBP']
 
@@ -102,22 +103,23 @@ def get_global_currencies():
     exchange_rate = {}
     bid_price = {}
     ask_price = {}
+    variance = {}
 
     for c in currencies:
-        url = f"https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={c}&to_currency={vs_currency}&apikey={a_v_token}"
-        r = requests.get(url)
-        data = r.json()
-        data = data['Realtime Currency Exchange Rate']
-        currency_names.append(f"{c}/{vs_currency}")
-        exchange_rate[c] = data['5. Exchange Rate']
-        bid_price[c] = data['8. Bid Price']
-        ask_price[c] = data['9. Ask Price']
+        currency = yf.Ticker(f"{c}{vs_currency}=X")
+        data = currency.info
+        currency_names.append(f"{vs_currency}/{c}")
+        exchange_rate[c] = data['open']
+        bid_price[c] = data['bid']
+        ask_price[c] = data['ask']
+        variance[c] = data['previousClose'] / data['open'] - 1
 
     df = pd.DataFrame({
         'Moneda': currency_names,
         'Tipo de Cambio': exchange_rate.values(),
         'Compra': bid_price.values(),
-        'Venta': ask_price.values()
+        'Venta': ask_price.values(),
+        "Variación": variance.values()
     })
     return df
 
