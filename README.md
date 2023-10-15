@@ -89,7 +89,7 @@ streamlit run --help
 
 ### Documentación del proyecto
 
-La documentación de este proyecto la puedes encontrar en el archivo `Visualizaciones_Dashboard.ipynb`. Este es un notebook de Jupyter que puedes visualizar meidante: 
+La documentación de este proyecto la puedes encontrar en el archivo `Visualizaciones_Dashboard.ipynb`. Este es un notebook de Jupyter que puedes visualizar mediante: 
 
 ```bash
 jupyter lab Visualizaciones_Dashboard.ipynb
