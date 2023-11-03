@@ -1,10 +1,7 @@
-import datetime as dt
 import math
 
 import numpy as np
 import pandas as pd
-
-from cetes import Cetes
 
 
 class resultado:
@@ -16,11 +13,9 @@ class resultado:
 
 
 def calculo_cetes(capital_inicial, plazo, años):
-    cetes = Cetes(str(int(plazo)))
-    start_date = '2010-01-01'
-    end_date = str(dt.date.today())
-    tasas = cetes.get_data(date_end=end_date, date_start=start_date)
-    tasas = tasas['value']
+
+    tasas = np.array(
+        [[0.06, 0.07, 0.08, 0.09, 0.10, 0.09, 0.11, 0.12, 0.13, 0.14, 0.15]])
     periodos = int(años)*364/int(plazo)
     periodos = math.floor(periodos)
     capital_total = capital_inicial
@@ -70,4 +65,5 @@ def calculo_cetes(capital_inicial, plazo, años):
         'Interes Neto', "${:,.2f}".format(float(interes_neto_total))], ['Capital Final', capital_total]]
 
     df = pd.DataFrame(data, columns=['Concepto', 'Valor'])
+
     return df
