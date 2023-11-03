@@ -49,7 +49,7 @@ def calculo_cetes(capital_inicial, plazo, años):
         tasa = np.mean(tasas)
         capital = float(capital_total)
         plazo = float(plazo)
-        precio = 10 / (1 + (tasa / 364) * plazo)
+        precio = 10 / (1 + (tasa / 364) ** plazo)
         titulos = math.floor(capital/precio)
         remanente = capital % precio
         inversion_cetes = precio*titulos
