@@ -106,13 +106,13 @@ def get_global_currencies():
     variance = {}
 
     for c in currencies:
-        currency = yf.Ticker(f"{c}{vs_currency}=X")
-        data = currency.info
+        currency = yf.download(f"{c}{vs_currency}=X")
+        data = currency[-1:]
         currency_names.append(f"{c}/{vs_currency}")
-        exchange_rate[c] = data['open']
-        bid_price[c] = data['bid']
-        ask_price[c] = data['ask']
-        variance[c] = data['open'] / data['previousClose'] - 1
+        exchange_rate[c] = data['Open'][0]
+        bid_price[c] = data['High'][0]
+        ask_price[c] = data['Low'][0]
+        variance[c] = data['Open'][0] / data['Adj Close'][0] - 1
 
     df = pd.DataFrame({
         'Moneda': currency_names,
@@ -137,9 +137,6 @@ def get_personalized_stock_list(stocks):
 
     for t in stocks:
         data = yf.download(t, end_date, end_date, progress=False)
-        import pdb
-        pdb.set_trace()
-
         open[t] = data['Open'].values[0]
         high[t] = data['High'].values[0]
         low[t] = data['Low'].values[0]
