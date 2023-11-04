@@ -44,7 +44,6 @@ def generate_random_color():
     return "#" + hex_color.zfill(6)
 
 
-SELECTED_STOCK = 'AAPL'
 # --- Titulo
 
 st.title("Análisis de Situación Económica")
@@ -101,13 +100,26 @@ with contenedor.container():
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
 
     with stocks_graphs:
-        st.header(f"Stock Seleccionado: {SELECTED_STOCK}")
-        st.plotly_chart(data_sources.get_selected_stock(
-            SELECTED_STOCK, generate_random_color()), use_container_width=True)
+        def update_selected_stock():
+            selected_stock = st.session_state.selected_stock
+            st.plotly_chart(data_sources.get_selected_stock(
+                st.session_state.selected_stock, generate_random_color()), use_container_width=True)
+        st.session_state.selected_stock = 'AAPL'
+        st.header(
+            f"Stock Seleccionado: {st.session_state.selected_stock.upper()}")
+        st.text_input("Stock a Mostrar",
+                      on_change=update_selected_stock, key="selected_stock")
+        update_selected_stock()
 
     with display_news_stock:
         st.header("Noticias de Stock Seleccionado")
-        news = data_sources.get_selected_stock_news(SELECTED_STOCK, 2)
+        selected_stock_news = st.container()
+        selected_stock_news.empty()
+        try:
+            news = data_sources.get_selected_stock_news(
+                st.session_state.selected_stock, 2)
+        except:
+            st.write("No se encontraron noticias")
         for url, article in news.items():
             st.markdown(f"##### [{article['title'][:70]}...]({url}) " + (
                 ":grinning:" if article['sentiment'] == 'POSITIVE' else ":disappointed:"))
