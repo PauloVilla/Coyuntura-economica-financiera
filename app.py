@@ -6,10 +6,20 @@ import requests
 import streamlit as st
 import yaml
 import yfinance as yf
+from st_pages import Page, show_pages
 from yaml.loader import SafeLoader
 
 import data_sources
 from config import a_v_token
+
+st.set_page_config(layout="wide")
+show_pages(
+    [
+        Page("app.py", "Coyuntura", "wide", "🏠"),
+        Page("pages/Calculadora_de_Cetes.py",
+             "Calculadora Cetes", ":computer:"),
+    ]
+)
 
 NewsTopics = {
     "Blockchain": "blockchain",
@@ -29,8 +39,7 @@ NewsTopics = {
     "Technology": "technology"
 }
 
-st.set_page_config(
-    page_title="Dashboard de Coyuntura económica", layout="wide")
+st.title("Dashboard de Coyuntura Económica")
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)

@@ -23,6 +23,7 @@ torch = "*"
 torchvision = "*"
 torchaudio = "*"
 streamlit-extras = "*"
+st-pages = "*"
 
 [dev-packages]
 
