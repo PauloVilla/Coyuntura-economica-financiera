@@ -6,6 +6,7 @@ import requests
 import streamlit as st
 import yaml
 import yfinance as yf
+from streamlit_extras.tags import tagger_component
 from yaml.loader import SafeLoader
 
 import data_sources
@@ -44,6 +45,7 @@ def generate_random_color():
     return "#" + hex_color.zfill(6)
 
 
+selected_stocks = ['IBM', 'TSLA', 'AAPL', 'PLTR']
 # --- Titulo
 
 st.title("Análisis de Situación Económica")
@@ -92,9 +94,9 @@ with contenedor.container():
                      hide_index=True, use_container_width=True)
 
     with stock_watchlist:
-        st.header("Stocks")
-        st.dataframe(data_sources.get_personalized_stock_list(['IBM', 'TSLA', 'AAPL', 'PLTR']),
-                     hide_index=True, use_container_width=True)
+        tagger_component("Stocks", selected_stocks)
+        st.data_editor(data_sources.get_personalized_stock_list(selected_stocks),
+                       hide_index=True, use_container_width=True)
 
     # ----- Tercer fila (Stocks, news, cetes)
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
