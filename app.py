@@ -6,7 +6,6 @@ import requests
 import streamlit as st
 import yaml
 import yfinance as yf
-from streamlit_extras.tags import tagger_component
 from yaml.loader import SafeLoader
 
 import data_sources
@@ -89,43 +88,63 @@ with contenedor.container():
     global_currencies, stock_watchlist = st.columns(2)
 
     with global_currencies:
-        st.header("Principales Monedas")
-        st.dataframe(data_sources.get_global_currencies(),
+        st.header("Monedas")
+
+        if 'selected_currency_1' not in st.session_state:
+            st.session_state.selected_currency_1 = 'USD'
+            st.session_state.selected_currency_2 = 'AUD'
+            st.session_state.selected_currency_3 = 'JPY'
+            st.session_state.selected_currency_4 = 'GBP'
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.text_input(label="Moneda:", key="selected_currency_1")
+        with col2:
+            st.text_input(label="Moneda:", key="selected_currency_2")
+        with col3:
+            st.text_input(label="Moneda:", key="selected_currency_3")
+        with col4:
+            st.text_input(label="Stock:", key="selected_currency_4")
+        selected_currencies = [st.session_state.selected_currency_1, st.session_state.selected_currency_2,
+                               st.session_state.selected_currency_3, st.session_state.selected_currency_4]
+        st.dataframe(data_sources.get_global_currencies(selected_currencies),
                      hide_index=True, use_container_width=True)
 
     with stock_watchlist:
-        tagger_component("Stocks", selected_stocks)
-        st.data_editor(data_sources.get_personalized_stock_list(selected_stocks),
-                       hide_index=True, use_container_width=True)
+        st.header("Stocks")
+        if 'selected_stocks_1' not in st.session_state:
+            st.session_state.selected_stocks_1 = 'AMZN'
+            st.session_state.selected_stocks_2 = 'GOOGL'
+            st.session_state.selected_stocks_3 = 'TSLA'
+            st.session_state.selected_stocks_4 = 'AAPL'
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.text_input(label="Stock:", key="selected_stocks_1")
+        with col2:
+            st.text_input(label="Stock:", key="selected_stocks_2")
+        with col3:
+            st.text_input(label="Stock:", key="selected_stocks_3")
+        with col4:
+            st.text_input(label="Stock:", key="selected_stocks_4")
+        selected_stocks = [st.session_state.selected_stocks_1, st.session_state.selected_stocks_2,
+                           st.session_state.selected_stocks_3, st.session_state.selected_stocks_4]
+        with stock_watchlist:
+            st.data_editor(data_sources.get_personalized_stock_list(selected_stocks),
+                           hide_index=True, use_container_width=True)
 
     # ----- Tercer fila (Stocks, news, cetes)
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
 
     with stocks_graphs:
-        initialization = False
-
-        def update_selected_stock():
-            if not selected_stock_graph.empty():
-                return
-            selected_stock = st.session_state.selected_stock
-            stocks_graphs.empty()
-            with selected_stock_graph:
-                st.empty()
-                st.plotly_chart(data_sources.get_selected_stock(
-                    st.session_state.selected_stock, generate_random_color()), use_container_width=True)
-
         if 'selected_stock' not in st.session_state:
             initialization = True
             st.session_state.selected_stock = 'AAPL'
         st.header(
             f"Stock Seleccionado: {st.session_state.selected_stock.upper()}")
-        st.text_input("Stock a Mostrar",
-                      on_change=update_selected_stock, key="selected_stock")
-        selected_stock_graph = st.container()
-        selected_stock_graph.empty()
-
-        if initialization:
-            update_selected_stock()
+        st.text_input("Stock a Mostrar", key="selected_stock")
+        selected_stock_graph = st.empty()
+        with selected_stock_graph:
+            st.plotly_chart(data_sources.get_selected_stock(
+                st.session_state.selected_stock, generate_random_color()), use_container_width=True)
 
     with display_news_stock:
         st.header("Noticias de Stock Seleccionado")

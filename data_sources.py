@@ -94,11 +94,8 @@ def _get_article_summary(link):
 
 
 @st.cache_data
-def get_global_currencies():
-
+def get_global_currencies(currencies):
     vs_currency = 'MXN'
-    currencies = ['USD', 'AUD', 'JPY', 'GBP']
-
     currency_names = []
     exchange_rate = {}
     bid_price = {}
