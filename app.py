@@ -56,8 +56,6 @@ def generate_random_color():
 selected_stocks = ['IBM', 'TSLA', 'AAPL', 'PLTR']
 # --- Titulo
 
-st.title("Análisis de Situación Económica")
-
 # Creamos un contenedor que tendrá todo el dashboard
 contenedor = st.empty()
 
