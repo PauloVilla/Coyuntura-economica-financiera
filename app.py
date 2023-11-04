@@ -100,16 +100,30 @@ with contenedor.container():
     stocks_graphs, display_news_stock, cetes_plot = st.columns(3)
 
     with stocks_graphs:
+        initialization = False
+
         def update_selected_stock():
+            if not selected_stock_graph.empty():
+                return
             selected_stock = st.session_state.selected_stock
-            st.plotly_chart(data_sources.get_selected_stock(
-                st.session_state.selected_stock, generate_random_color()), use_container_width=True)
-        st.session_state.selected_stock = 'AAPL'
+            stocks_graphs.empty()
+            with selected_stock_graph:
+                st.empty()
+                st.plotly_chart(data_sources.get_selected_stock(
+                    st.session_state.selected_stock, generate_random_color()), use_container_width=True)
+
+        if 'selected_stock' not in st.session_state:
+            initialization = True
+            st.session_state.selected_stock = 'AAPL'
         st.header(
             f"Stock Seleccionado: {st.session_state.selected_stock.upper()}")
         st.text_input("Stock a Mostrar",
                       on_change=update_selected_stock, key="selected_stock")
-        update_selected_stock()
+        selected_stock_graph = st.container()
+        selected_stock_graph.empty()
+
+        if initialization:
+            update_selected_stock()
 
     with display_news_stock:
         st.header("Noticias de Stock Seleccionado")
