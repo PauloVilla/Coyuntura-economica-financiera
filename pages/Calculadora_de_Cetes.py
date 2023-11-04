@@ -6,11 +6,12 @@ from cetes_calculator import calculo_cetes
 number_input = None
 
 with st.container():
-    st.title("Calculadora de Cetes")
+    st.title("Calculadora de CETES")
     st.markdown(
-        "Esta calculadora de Cetes te permite calcular el valor de tu inversión a un cierto plazo de años.")
+        "Esta calculadora de CETES te permite calcular el valor de tu inversión a un cierto plazo de años.")
     st.markdown(
         "Módifica el capital inicial, periodo de inversión y años a invertir a tu gusto. La calculadora te dirá el monto en capital final que tendrás después del periodo de inversión.")
+
     st.divider()
 col1, col2, col3, col4 = st.columns(4)
 st.divider()
@@ -55,3 +56,6 @@ st.write(
     """,
     unsafe_allow_html=True
 )
+
+st.markdown(
+    "Para más información sobre CETES, visita la página de [CETES Directo](https://www.cetesdirecto.com/sites/portal/inicio).")

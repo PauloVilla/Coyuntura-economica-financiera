@@ -114,6 +114,6 @@ with contenedor.container():
             st.markdown(f"{article['body'][:140]}...")
 
     with cetes_plot:
-        st.header("Grafica Histórica de Cetes")
+        st.header("Grafica Histórica de CETES")
         st.plotly_chart(data_sources.get_cetes_graph(
             "28", generate_random_color()), use_container_width=True)
