@@ -16,7 +16,7 @@ class resultado:
 
 
 def calculo_cetes(capital_inicial, plazo, años):
-
+    # TODO: Recortar plazo por N = 52 semanas (Por ejemplo)
     cetes = Cetes(str(int(plazo)))
     end_date = str(dt.date.today())
     tasas_2020 = cetes.get_data(date_end='2020-12-31', date_start='2020-01-01')

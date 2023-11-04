@@ -166,7 +166,6 @@ def get_selected_stock(stock, graph_color):
 
     # Configurar el título y etiquetas de los ejes
     fig.update_layout(
-        title=stock,
         xaxis_title='Fecha',
         yaxis_title='Precio Cierre',
         xaxis=dict(tickangle=-45)
@@ -198,7 +197,7 @@ def get_cetes_graph(term, graph_color):
     fig.update_layout(
         xaxis_title='Fecha',
         yaxis_title='Valor',
-        title=f'Gráfica de barras para Cetes {term}')
+    )
     return fig
 
 

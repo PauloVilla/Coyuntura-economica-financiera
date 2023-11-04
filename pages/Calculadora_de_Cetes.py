@@ -58,4 +58,4 @@ st.write(
 )
 
 st.markdown(
-    "Para más información sobre CETES, visita la página de [CETES Directo](https://www.cetesdirecto.com/sites/portal/inicio).")
+    "Para más información sobre CETES, visita la página de [Banxico](https://www.banxico.org.mx/).")

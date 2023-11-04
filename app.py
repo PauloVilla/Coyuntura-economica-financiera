@@ -66,15 +66,15 @@ with contenedor.container():
     inx_1, inx_2, inx_3 = st.columns(3)
 
     with inx_1:
-        st.header("S&P 500 (^GSPC)")
+        st.header("S&P 500")
         st.plotly_chart(data_sources.get_main_index_data(
             "^GSPC", generate_random_color()), use_container_width=True)
     with inx_2:
-        st.header("NASDAQ100 (^NDX)")
+        st.header("NASDAQ100")
         st.plotly_chart(data_sources.get_main_index_data(
             "^NDX", generate_random_color()), use_container_width=True)
     with inx_3:
-        st.header("IPC (^MXX)")
+        st.header("IPC")
         st.plotly_chart(data_sources.get_main_index_data(
             "^MXX", generate_random_color()), use_container_width=True)
 
@@ -110,14 +110,14 @@ with contenedor.container():
         with col3:
             st.text_input(label="Moneda:", key="selected_currency_3")
         with col4:
-            st.text_input(label="Stock:", key="selected_currency_4")
+            st.text_input(label="Moneda:", key="selected_currency_4")
         selected_currencies = [st.session_state.selected_currency_1, st.session_state.selected_currency_2,
                                st.session_state.selected_currency_3, st.session_state.selected_currency_4]
         st.dataframe(data_sources.get_global_currencies(selected_currencies),
                      hide_index=True, use_container_width=True)
 
     with stock_watchlist:
-        st.header("Stocks")
+        st.header("Acciones")
         if 'selected_stocks_1' not in st.session_state:
             st.session_state.selected_stocks_1 = 'AMZN'
             st.session_state.selected_stocks_2 = 'GOOGL'
@@ -125,13 +125,13 @@ with contenedor.container():
             st.session_state.selected_stocks_4 = 'AAPL'
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.text_input(label="Stock:", key="selected_stocks_1")
+            st.text_input(label="Acción:", key="selected_stocks_1")
         with col2:
-            st.text_input(label="Stock:", key="selected_stocks_2")
+            st.text_input(label="Acción:", key="selected_stocks_2")
         with col3:
-            st.text_input(label="Stock:", key="selected_stocks_3")
+            st.text_input(label="Acción:", key="selected_stocks_3")
         with col4:
-            st.text_input(label="Stock:", key="selected_stocks_4")
+            st.text_input(label="Acción:", key="selected_stocks_4")
         selected_stocks = [st.session_state.selected_stocks_1, st.session_state.selected_stocks_2,
                            st.session_state.selected_stocks_3, st.session_state.selected_stocks_4]
         with stock_watchlist:
@@ -146,15 +146,15 @@ with contenedor.container():
             initialization = True
             st.session_state.selected_stock = 'AAPL'
         st.header(
-            f"Stock Seleccionado: {st.session_state.selected_stock.upper()}")
-        st.text_input("Stock a Mostrar", key="selected_stock")
+            f"Acción Seleccionada:")
+        st.text_input(label="", key="selected_stock")
         selected_stock_graph = st.empty()
         with selected_stock_graph:
             st.plotly_chart(data_sources.get_selected_stock(
                 st.session_state.selected_stock, generate_random_color()), use_container_width=True)
 
     with display_news_stock:
-        st.header("Noticias de Stock Seleccionado")
+        st.header("Noticias de Acción Seleccionada")
         selected_stock_news = st.container()
         selected_stock_news.empty()
         try:
