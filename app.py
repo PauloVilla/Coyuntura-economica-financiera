@@ -126,13 +126,17 @@ with contenedor.container():
             st.session_state.selected_stocks_4 = 'AAPL'
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.text_input(label="Acción:", key="selected_stocks_1")
+            st.selectbox(label="Acción",
+                         options=data_sources.get_stocks_catalog(), key="selected_stocks_1")
         with col2:
-            st.text_input(label="Acción:", key="selected_stocks_2")
+            st.selectbox(label="Acción",
+                         options=data_sources.get_stocks_catalog(), key="selected_stocks_2")
         with col3:
-            st.text_input(label="Acción:", key="selected_stocks_3")
+            st.selectbox(label="Acción",
+                         options=data_sources.get_stocks_catalog(), key="selected_stocks_3")
         with col4:
-            st.text_input(label="Acción:", key="selected_stocks_4")
+            st.selectbox(label="Acción",
+                         options=data_sources.get_stocks_catalog(), key="selected_stocks_4")
         selected_stocks = [st.session_state.selected_stocks_1, st.session_state.selected_stocks_2,
                            st.session_state.selected_stocks_3, st.session_state.selected_stocks_4]
         with stock_watchlist:

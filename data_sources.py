@@ -135,11 +135,19 @@ def get_personalized_stock_list(stocks):
     for t in stocks:
         data = yf.download(t, end_date, end_date, progress=False)
 
-        open[t] = data['Open'].values[0]
-        high[t] = data['High'].values[0]
-        low[t] = data['Low'].values[0]
-        price[t] = data['Close'].values[0]
-        volume[t] = data['Volume'].values[0]
+        if data.empty:
+            open[t] = 0
+            open[t] = 0
+            high[t] = 0
+            low[t] = 0
+            price[t] = 0
+            volume[t] = 0
+        else:
+            open[t] = data['Open'].values[0]
+            high[t] = data['High'].values[0]
+            low[t] = data['Low'].values[0]
+            price[t] = data['Close'].values[0]
+            volume[t] = data['Volume'].values[0]
 
     df = pd.DataFrame({
         'Ticker': stocks,
@@ -223,3 +231,9 @@ def get_stock_performance(ticker, start_date, end_date):
     performance = ((final_price - initial_price) / initial_price) * 100
 
     return performance
+
+
+@st.cache_data
+def get_stocks_catalog():
+    df = pd.read_csv("nasdaq_companies.csv")
+    return df
