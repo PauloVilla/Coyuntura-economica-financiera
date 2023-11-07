@@ -15,9 +15,10 @@ from config import a_v_token
 st.set_page_config(layout="wide")
 show_pages(
     [
-        Page("app.py", "Coyuntura", "wide", "🏠"),
+        Page("app.py", "Coyuntura", "🏠"),
         Page("pages/Calculadora_de_Cetes.py",
              "Calculadora Cetes", ":computer:"),
+        Page("pages/Stocks.py", "Acciones", ":chart_with_upwards_trend:"),
     ]
 )
 
