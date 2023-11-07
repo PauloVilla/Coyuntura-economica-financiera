@@ -237,3 +237,9 @@ def get_stock_performance(ticker, start_date, end_date):
 def get_stocks_catalog():
     df = pd.read_csv("nasdaq_companies.csv")
     return df
+
+
+@st.cache_data
+def get_currency_catalog():
+    df = pd.read_csv("currency_codes.csv")
+    return df
