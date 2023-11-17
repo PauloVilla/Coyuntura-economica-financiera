@@ -37,6 +37,7 @@ def cambio_parametros():
     with container:
         st.table(resumen)
     with graph_container:
+        st.header("Progresión de Capital")
         st.plotly_chart(historico)
 
 
