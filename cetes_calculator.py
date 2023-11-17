@@ -86,13 +86,13 @@ def calculo_cetes(capital_inicial, plazo, años):
 
     # Agrega las barras a la figura
     historico.add_trace(go.Scatter(
-        x=capital_por_periodo['Capital'],
-        y=capital_por_periodo['Periodo']))
+        x=capital_por_periodo['Periodo'],
+        y=capital_por_periodo['Capital']))
 
     # Configuración del estilo de la gráfica
     historico.update_layout(
-        xaxis_title='Capital',
-        yaxis_title='Periodo',
+        xaxis_title='Periodo',
+        yaxis_title='Capital',
     )
     df = pd.DataFrame(data, columns=['Concepto', 'Valor'])
 
