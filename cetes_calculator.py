@@ -35,6 +35,7 @@ def calculo_cetes(capital_inicial, plazo, años):
     capital_total = capital_inicial
     interes_neto_total = 0
     años_transurridos = 0
+    capital_por_periodo = []
 
     for i in range(periodos):
 
