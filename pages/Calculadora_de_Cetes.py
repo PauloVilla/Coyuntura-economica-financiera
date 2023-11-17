@@ -35,7 +35,7 @@ def cambio_parametros():
     resumen, historico = calculo_cetes(
         capital, periodo, anios_invertir)
     with container:
-        st.table(resumen)
+        st.data_editor(resumen, hide_index=True, use_container_width=True)
     with graph_container:
         st.header("Progresión de Capital")
         st.plotly_chart(historico)
@@ -52,7 +52,7 @@ with col3:
         "Años de Inversión", value=2, placeholder="Entrar cantidad de años a inveritr", key="anios_invertir")
 
 with col4:
-    st.button("Hacer Cálculo", key="calc_button",
+    st.button("Calcular", key="calc_button",
               on_click=cambio_parametros, use_container_width=True)
 
 st.write(
