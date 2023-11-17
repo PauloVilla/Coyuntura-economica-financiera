@@ -54,7 +54,7 @@ def plot_backtesting(history: pd.DataFrame):
         yaxis_title="Capital",
         showlegend=True
     )
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 
 # Definimos un contenedor primero
@@ -62,12 +62,12 @@ cont = st.empty()
 
 with cont.container():
     st.title("Calculadora de acciones")
-    # Definimos parámetros
+    # Definimos parámetros, al ser bastantes los dividimos en 2 filas de 3 columnas
     param_1, param_2, param_3 = st.columns(3)
 
     with param_1:
         acciones = st.multiselect("Selecciona la(s) accion(es) de tu portafolio", tickers_class())
-        # Lo dejamos como string separado por comas para que funcione
+        # Lo convertimos a string separado por comas para que funcione
         acciones = ", ".join(acciones)
 
     with param_2:
@@ -77,27 +77,26 @@ with cont.container():
     with param_3:
         capital = st.number_input("Selecciona el capital de tu portafolio", min_value=0)
 
+    # Comenzamos con los siguientes parámetros
     param_4, param_5, param_6 = st.columns(3)
 
     with param_4:
-        dt_inicio = st.date_input("Fecha de Inicio", pd.to_datetime('2023-01-01'))
+        dt_inicio = st.date_input("Fecha inicial", pd.to_datetime('2023-01-01'))
 
     with param_5:
-        dt_final = st.date_input("Fecha de Fin", pd.to_datetime('2023-12-31'))
+        dt_final = st.date_input("Fecha final", pd.to_datetime('2023-12-31'))
 
     with param_6:
-        exe = st.button("Ejecutar")
+        exe = st.button("Ejecutar", use_container_width=True)
 
     if exe:
         metricas, history = apply_backtesting(tickers=acciones, start_dt=dt_inicio,
                                               end_dt=dt_final, cap=capital)
-        tabla, grafica = st.columns(2)
 
-        with tabla:
-            st.write("Resultado de las estrategias")
-            metricas = metricas[metricas.index.isin(estrategias)]
-            st.table(metricas)
+        estrategias.append("Benchmark")
+        st.write("Resultado de las estrategias")
+        metricas = metricas[metricas.index.isin(estrategias)]
+        st.table(metricas)
 
-        with grafica:
-            history = history[estrategias]
-            plot_backtesting(history=history)
+        history = history[estrategias]
+        plot_backtesting(history=history)
