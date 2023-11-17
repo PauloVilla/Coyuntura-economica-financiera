@@ -3,6 +3,7 @@ import math
 
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
 
 from cetes import Cetes
 
@@ -71,11 +72,27 @@ def calculo_cetes(capital_inicial, plazo, años):
         capital_total = utilidad_neta+remanente+capital
         interes_neto_total = interes_neto_total + utilidad_neta
 
+        capital_por_periodo.append({'Periodo': i+1, 'Capital': capital, 'Interes': interes_bruto,
+                                    'ISR': isr, 'Capital Total': capital_total})
+
     capital_total = "${:,.2f}".format(capital_total)
     utilidad_neta = "${:,.2f}".format(utilidad_neta)
     data = [['Capital Inicial', "${:,.2f}".format(float(capital_inicial))], ['Plazo', f"{plazo} días"], ['Periodos', periodos], [
         'Interes Neto', "${:,.2f}".format(float(interes_neto_total))], ['Capital Final', capital_total]]
 
+    capital_por_periodo = pd.DataFrame(capital_por_periodo)
+    historico = go.Figure()
+
+    # Agrega las barras a la figura
+    historico.add_trace(go.Scatter(
+        x=capital_por_periodo['Capital'],
+        y=capital_por_periodo['Periodo']))
+
+    # Configuración del estilo de la gráfica
+    historico.update_layout(
+        xaxis_title='Capital',
+        yaxis_title='Periodo',
+    )
     df = pd.DataFrame(data, columns=['Concepto', 'Valor'])
 
-    return df
+    return df, historico

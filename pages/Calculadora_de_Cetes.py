@@ -19,6 +19,9 @@ df = DataFrame()
 container = st.container()
 container.empty()
 
+graph_container = st.container()
+graph_container.empty()
+
 
 def cambio_parametros():
     try:
@@ -28,9 +31,13 @@ def cambio_parametros():
     except Exception as e:
         print(e)
         return
+
+    resumen, historico = calculo_cetes(
+        capital, periodo, anios_invertir)
     with container:
-        st.table(calculo_cetes(
-            capital, periodo, anios_invertir))
+        st.table(resumen)
+    with graph_container:
+        st.plotly_chart(historico)
 
 
 with col1:
