@@ -170,12 +170,13 @@ with contenedor.container():
         try:
             news = data_sources.get_selected_stock_news(
                 st.session_state.selected_stock, 2)
+            for url, article in news.items():
+                st.markdown(f"##### [{article['title'][:70]}...]({url}) " + (
+                    ":grinning:" if article['sentiment'] == 'POSITIVE' else ":disappointed:"))
+                st.markdown(f"{article['body'][:140]}...")
         except:
-            st.write("No se encontraron noticias")
-        for url, article in news.items():
-            st.markdown(f"##### [{article['title'][:70]}...]({url}) " + (
-                ":grinning:" if article['sentiment'] == 'POSITIVE' else ":disappointed:"))
-            st.markdown(f"{article['body'][:140]}...")
+            st.write(
+                f"No se encontraron noticias relacionadas con la Acción {st.session_state.selected_stock}")
 
     with cetes_plot:
         st.header("Grafica Histórica de CETES")
