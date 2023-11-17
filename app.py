@@ -156,7 +156,8 @@ with contenedor.container():
             st.session_state.selected_stock = 'AAPL'
         st.header(
             f"Acción Seleccionada:")
-        st.text_input(label="", key="selected_stock")
+        st.selectbox(label="Acción",
+                     options=data_sources.get_stocks_catalog(), key="selected_stock")
         selected_stock_graph = st.empty()
         with selected_stock_graph:
             st.plotly_chart(data_sources.get_selected_stock(
