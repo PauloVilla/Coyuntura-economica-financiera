@@ -15,7 +15,7 @@ from newspaper import Article
 from transformers import pipeline
 
 from cetes import Cetes
-from config import a_v_token  # archivo de python con el api key de alpha vantage
+from config import api_key  # archivo de python con el api key de alpha vantage
 
 sentiment_pipeline = pipeline("sentiment-analysis")
 st_date = datetime(datetime.now().year, 1, 1)
@@ -43,7 +43,7 @@ def get_main_index_data(ticker, color):
 def get_main_news(topics, number_of_articles):
     topic = ','.join(topics)
 
-    url = f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&topics={topic}&sort=RELEVANCE&apikey={a_v_token}'
+    url = f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&topics={topic}&sort=RELEVANCE&apikey={api_key}'
     r = requests.get(url)
     data = r.json()
     return parse_news(data, number_of_articles)
@@ -212,7 +212,7 @@ def get_cetes_graph(term, graph_color):
 @st.cache_data
 def get_selected_stock_news(stock, number_of_articles):
     d = datetime.today() - timedelta(days=180)
-    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={stock}&time_from={d.strftime('%Y%m%dT%H%M')}&limit=3&sort=RELEVANCE&apikey={a_v_token}"
+    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={stock}&time_from={d.strftime('%Y%m%dT%H%M')}&limit=3&sort=RELEVANCE&apikey={api_key}"
     r = requests.get(url)
     data = r.json()
     return parse_news(data, number_of_articles)

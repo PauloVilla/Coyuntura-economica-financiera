@@ -10,7 +10,6 @@ from st_pages import Page, show_pages
 from yaml.loader import SafeLoader
 
 import data_sources
-from config import a_v_token
 
 st.set_page_config(layout="wide")
 show_pages(
