@@ -133,21 +133,16 @@ def get_personalized_stock_list(stocks):
     change_percent = {}
 
     for t in stocks:
-        data = yf.download(t, end_date, end_date, progress=False)
+        for i in range(5):
+            data = yf.download(t, st_date, end_date, progress=False)
+            if not data.empty:
+                break
 
-        if data.empty:
-            open[t] = 0
-            open[t] = 0
-            high[t] = 0
-            low[t] = 0
-            price[t] = 0
-            volume[t] = 0
-        else:
-            open[t] = data['Open'].values[0]
-            high[t] = data['High'].values[0]
-            low[t] = data['Low'].values[0]
-            price[t] = data['Close'].values[0]
-            volume[t] = data['Volume'].values[0]
+        open[t] = data['Open'].values[0]
+        high[t] = data['High'].values[0]
+        low[t] = data['Low'].values[0]
+        price[t] = data['Close'].values[0]
+        volume[t] = data['Volume'].values[0]
 
     df = pd.DataFrame({
         'Ticker': stocks,
