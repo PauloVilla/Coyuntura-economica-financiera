@@ -4,6 +4,7 @@ from pandas import DataFrame
 from cetes_calculator import calculo_cetes
 
 number_input = None
+st.set_page_config(layout="wide")
 
 with st.container():
     st.title("Calculadora de CETES")

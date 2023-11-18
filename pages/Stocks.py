@@ -57,6 +57,7 @@ def plot_backtesting(history: pd.DataFrame):
     st.plotly_chart(fig, use_container_width=True)
 
 
+st.set_page_config(layout="wide")
 # Definimos un contenedor primero
 cont = st.empty()
 
@@ -66,7 +67,8 @@ with cont.container():
     param_1, param_2, param_3 = st.columns(3)
 
     with param_1:
-        acciones = st.multiselect("Selecciona la(s) accion(es) de tu portafolio", tickers_class())
+        acciones = st.multiselect(
+            "Selecciona la(s) accion(es) de tu portafolio", tickers_class())
         # Lo convertimos a string separado por comas para que funcione
         acciones = ", ".join(acciones)
 
@@ -75,13 +77,15 @@ with cont.container():
                                      ["Min Var", "Max Sharpe", "Semivariance", "Omega"])
 
     with param_3:
-        capital = st.number_input("Selecciona el capital de tu portafolio", min_value=0)
+        capital = st.number_input(
+            "Selecciona el capital de tu portafolio", min_value=0)
 
     # Comenzamos con los siguientes parámetros
     param_4, param_5, param_6 = st.columns(3)
 
     with param_4:
-        dt_inicio = st.date_input("Fecha inicial", pd.to_datetime('2023-01-01'))
+        dt_inicio = st.date_input(
+            "Fecha inicial", pd.to_datetime('2023-01-01'))
 
     with param_5:
         dt_final = st.date_input("Fecha final", pd.to_datetime('2023-12-31'))
