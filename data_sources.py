@@ -11,7 +11,7 @@ import streamlit as st
 import yfinance as yf
 from googletrans import Translator
 from ipywidgets import interact
-from newspaper import Article
+from newspaper import Article, ArticleException
 from transformers import pipeline
 
 from cetes import Cetes
@@ -71,7 +71,8 @@ def parse_news(data, number_of_articles):
                 "body": body,
                 "sentiment": sentiment_analysis["label"]
             }
-        except:
+        except ArticleException as e:
+            print(e)
             print(f"Error parsing article {link[0]}")
         pending_articles = number_of_articles - len(news_summaries.keys())
         print(f"Pending articles: {pending_articles}")
