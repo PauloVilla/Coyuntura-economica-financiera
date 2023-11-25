@@ -39,7 +39,7 @@ NewsTopics = {
     "Technology": "technology"
 }
 
-st.title("Dashboard de Coyuntura Económica")
+st.markdown("<h1 style='text-align: center;'>Dashboard de Coyuntura Económica</h1>", unsafe_allow_html=True)
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -66,20 +66,21 @@ with contenedor.container():
     inx_1, inx_2, inx_3 = st.columns(3)
 
     with inx_1:
-        st.header("S&P 500")
+        st.markdown("<h2 style='text-align: center;'>S&P 500</h2>", unsafe_allow_html=True)
+
         st.plotly_chart(data_sources.get_main_index_data(
             "^GSPC", generate_random_color()), use_container_width=True)
     with inx_2:
-        st.header("NASDAQ100")
+        st.markdown("<h2 style='text-align: center;'>NASDAQ100</h2>", unsafe_allow_html=True)
         st.plotly_chart(data_sources.get_main_index_data(
             "^NDX", generate_random_color()), use_container_width=True)
     with inx_3:
-        st.header("IPC")
+        st.markdown("<h2 style='text-align: center;'>IPC</h2>", unsafe_allow_html=True)
         st.plotly_chart(data_sources.get_main_index_data(
             "^MXX", generate_random_color()), use_container_width=True)
 
     # --- Segunda fila (Noticias, currencies y stock watchlist)
-    st.write("## Principales Noticias")
+    st.markdown("<h2 style='text-align: center;'>Principales Noticias</h2>", unsafe_allow_html=True)
     cols = st.columns(4)
 
     news = data_sources.get_main_news(
@@ -95,7 +96,7 @@ with contenedor.container():
     global_currencies, stock_watchlist = st.columns(2)
 
     with global_currencies:
-        st.header("Monedas")
+        st.markdown("<h2 style='text-align: center;'>Monedas</h2>", unsafe_allow_html=True)
 
         if 'selected_currency_1' not in st.session_state:
             st.session_state.selected_currency_1 = 'USD'
@@ -104,16 +105,16 @@ with contenedor.container():
             st.session_state.selected_currency_4 = 'GBP'
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.selectbox(label="Moneda",
+            st.selectbox(label="",
                          options=data_sources.get_currency_catalog(), key="selected_currency_1")
         with col2:
-            st.selectbox(label="Moneda",
+            st.selectbox(label="",
                          options=data_sources.get_currency_catalog(), key="selected_currency_2")
         with col3:
-            st.selectbox(label="Moneda",
+            st.selectbox(label="",
                          options=data_sources.get_currency_catalog(), key="selected_currency_3")
         with col4:
-            st.selectbox(label="Moneda",
+            st.selectbox(label="",
                          options=data_sources.get_currency_catalog(), key="selected_currency_4")
         selected_currencies = [st.session_state.selected_currency_1, st.session_state.selected_currency_2,
                                st.session_state.selected_currency_3, st.session_state.selected_currency_4]
@@ -121,7 +122,7 @@ with contenedor.container():
                      hide_index=True, use_container_width=True)
 
     with stock_watchlist:
-        st.header("Acciones")
+        st.markdown("<h2 style='text-align: center;'>Acciones</h2>", unsafe_allow_html=True)
         if 'selected_stocks_1' not in st.session_state:
             st.session_state.selected_stocks_1 = 'AMZN'
             st.session_state.selected_stocks_2 = 'GOOGL'
@@ -129,16 +130,16 @@ with contenedor.container():
             st.session_state.selected_stocks_4 = 'AAPL'
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.selectbox(label="Acción",
+            st.selectbox(label="",
                          options=data_sources.get_stocks_catalog(), key="selected_stocks_1")
         with col2:
-            st.selectbox(label="Acción",
+            st.selectbox(label="",
                          options=data_sources.get_stocks_catalog(), key="selected_stocks_2")
         with col3:
-            st.selectbox(label="Acción",
+            st.selectbox(label="",
                          options=data_sources.get_stocks_catalog(), key="selected_stocks_3")
         with col4:
-            st.selectbox(label="Acción",
+            st.selectbox(label="",
                          options=data_sources.get_stocks_catalog(), key="selected_stocks_4")
         selected_stocks = [st.session_state.selected_stocks_1, st.session_state.selected_stocks_2,
                            st.session_state.selected_stocks_3, st.session_state.selected_stocks_4]
@@ -153,9 +154,8 @@ with contenedor.container():
         if 'selected_stock' not in st.session_state:
             initialization = True
             st.session_state.selected_stock = 'AAPL'
-        st.header(
-            f"Acción Seleccionada:")
-        st.selectbox(label="Acción",
+        st.markdown("<h2 style='text-align: center;'>Seleccionar Acción</h2>", unsafe_allow_html=True)
+        st.selectbox(label="",
                      options=data_sources.get_stocks_catalog(), key="selected_stock")
         selected_stock_graph = st.empty()
         with selected_stock_graph:
@@ -163,7 +163,7 @@ with contenedor.container():
                 st.session_state.selected_stock, generate_random_color()), use_container_width=True)
 
     with display_news_stock:
-        st.header("Noticias de Acción Seleccionada")
+        st.markdown("<h2 style='text-align: center;'>Noticias de Acción Seleccionada</h2>", unsafe_allow_html=True)
         selected_stock_news = st.container()
         selected_stock_news.empty()
         try:
@@ -178,6 +178,6 @@ with contenedor.container():
                 f"No se encontraron noticias relacionadas con la Acción {st.session_state.selected_stock}")
 
     with cetes_plot:
-        st.header("Grafica Histórica de CETES")
+        st.markdown("<h2 style='text-align: center;'>Grafica Histórica de CETES</h2>", unsafe_allow_html=True)
         st.plotly_chart(data_sources.get_cetes_graph(
             "28", generate_random_color()), use_container_width=True)

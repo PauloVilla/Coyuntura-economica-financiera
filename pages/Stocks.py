@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
+from datetime import datetime, timedelta
 from functions import download_data, asset_allocation, backtesting
 
 
@@ -14,12 +15,12 @@ def tickers_class():
 
 
 @st.cache_data
-def apply_backtesting(tickers, start_dt, end_dt, cap):
+def apply_backtesting(tickers, cap, start_dt_back, end_dt_back, start_dt, end_dt):
     # Como benchmark utilizamos GSCP
     benchmark = "^GSPC"
     # Descargamos los datos.
     data_opt, data_benchmark_opt = download_data(benchmark=benchmark, tickers_USA=tickers,
-                                                 start_date=start_dt, end_date=end_dt).download()
+                                                 start_date=start_dt_back, end_date=end_dt_back).download()
     # Generamos el asset allocation con una tasa de 0.05 libre de riesgo
     AA = asset_allocation(data_opt, data_benchmark_opt, .05)
     # Generamos los pesos, con un n_port de 10000
@@ -29,8 +30,8 @@ def apply_backtesting(tickers, start_dt, end_dt, cap):
     # Descargamos los datos con nuevas fechas más actuales, los mismos tickers y benchmarks.
     data_backtesting, data_benchmark_backtesting = download_data(tickers_USA=tickers,
                                                                  benchmark=benchmark,
-                                                                 start_date="2022-01-01",
-                                                                 end_date="2023-01-01").download()
+                                                                 start_date=start_dt,
+                                                                 end_date=end_dt).download()
     # Hacemos el backtesting
     BT = backtesting(weights_summary=weights_summary, data_stocks=data_backtesting,
                      data_benchmark=data_benchmark_backtesting, cap_inicial=cap)
@@ -49,7 +50,6 @@ def plot_backtesting(history: pd.DataFrame):
         fig.add_trace(go.Scatter(x=history.index, y=history[column], mode='lines', name=column))
     # Personalizar el diseño del gráfico
     fig.update_layout(
-        title="Backtesting de las estrategias",
         xaxis_title="Fecha",
         yaxis_title="Capital",
         showlegend=True
@@ -62,7 +62,8 @@ st.set_page_config(layout="wide")
 cont = st.empty()
 
 with cont.container():
-    st.title("Calculadora de acciones")
+    st.markdown("<h1 style='text-align: center;'>Calculadora de acciones</h1>", unsafe_allow_html=True)
+    st.write("---")
     # Definimos parámetros, al ser bastantes los dividimos en 2 filas de 3 columnas
     param_1, param_2, param_3 = st.columns(3)
 
@@ -79,26 +80,32 @@ with cont.container():
     with param_3:
         capital = st.number_input(
             "Selecciona el capital de tu portafolio", min_value=0)
-
+    
     # Comenzamos con los siguientes parámetros
     param_4, param_5, param_6 = st.columns(3)
-
+    # Obtener la fecha actual
+    fecha_actual = datetime.now().date()
     with param_4:
         dt_inicio = st.date_input(
             "Fecha inicial", pd.to_datetime('2023-01-01'))
 
     with param_5:
-        dt_final = st.date_input("Fecha final", pd.to_datetime('2023-12-31'))
+        dt_final = st.date_input("Fecha final", max_value=fecha_actual)# pd.to_datetime('2023-12-31'))
 
     with param_6:
         exe = st.button("Ejecutar", use_container_width=True)
+    st.write("---")
+    nueva_fecha_inicial = dt_inicio - timedelta(days=365)
+    nueva_fecha_final = dt_inicio - timedelta(days=1)   
 
     if exe:
-        metricas, history = apply_backtesting(tickers=acciones, start_dt=dt_inicio,
-                                              end_dt=dt_final, cap=capital)
+        metricas, history = apply_backtesting(tickers=acciones, cap=capital, 
+                                              start_dt_back= nueva_fecha_inicial,
+                                              end_dt_back=nueva_fecha_final,
+                                              start_dt=dt_inicio, end_dt=dt_final)
 
         estrategias.append("Benchmark")
-        st.write("Resultado de las estrategias")
+        st.markdown("<h2 style='text-align: center;'>Resultado de las estrategias</h2>", unsafe_allow_html=True)
         metricas = metricas[metricas.index.isin(estrategias)]
         st.table(metricas)
 

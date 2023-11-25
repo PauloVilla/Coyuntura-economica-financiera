@@ -7,11 +7,9 @@ number_input = None
 st.set_page_config(layout="wide")
 
 with st.container():
-    st.title("Calculadora de CETES")
-    st.markdown(
-        "Esta calculadora de CETES te permite calcular el valor de tu inversión a un cierto plazo de años.")
-    st.markdown(
-        "Módifica el capital inicial, periodo de inversión y años a invertir a tu gusto. La calculadora te dirá el monto en capital final que tendrás después del periodo de inversión.")
+    st.markdown("<h1 style='text-align: center;'>Calculadora de CETES</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Esta calculadora de CETES te permite calcular el valor de tu inversión a un cierto plazo de años.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Módifica el capital inicial, periodo de inversión y años a invertir a tu gusto. La calculadora te dirá el monto en capital final que tendrás después del periodo de inversión.</p>", unsafe_allow_html=True)
 
     st.divider()
 col1, col2, col3, col4 = st.columns(4)
@@ -38,8 +36,8 @@ def cambio_parametros():
     with container:
         st.data_editor(resumen, hide_index=True, use_container_width=True)
     with graph_container:
-        st.header("Progresión de Capital")
-        st.plotly_chart(historico)
+        st.markdown("<h2 style='text-align: center;'>Progresión de Capital</h2>", unsafe_allow_html=True)
+        st.plotly_chart(historico, use_container_width=True)
 
 
 with col1:
