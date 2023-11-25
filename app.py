@@ -25,21 +25,22 @@ NewsTopics = {
     "Blockchain": "blockchain",
     "Earnings": "earnings",
     "IPO": "ipo",
-    "Mergers_and_Acquisitions": "mergers_and_acquisitions",
-    "Financial_Markets": "financial_markets",
-    "Economy_Fiscal_Policy": "economy_fiscal",
-    "Economy_Monetary_Policy": "economy_monetary",
-    "Economy_Macro_Overall": "economy_macro",
-    "Energy_and_Transportation": "energy_transportation",
+    "Mergers and Acquisitions": "mergers_and_acquisitions",
+    "Financial Markets": "financial_markets",
+    "Economy Fiscal Policy": "economy_fiscal",
+    "Economy Monetary Policy": "economy_monetary",
+    "Economy Macro Overall": "economy_macro",
+    "Energy and Transportation": "energy_transportation",
     "Finance": "finance",
-    "Life_Sciences": "life_sciences",
+    "Life Sciences": "life_sciences",
     "Manufacturing": "manufacturing",
-    "Real_Estate_and_Construction": "real_estate",
-    "Retail_and_Wholesale": "retail_wholesale",
+    "Real Estate and Construction": "real_estate",
+    "Retail and Wholesale": "retail_wholesale",
     "Technology": "technology"
 }
 
-st.markdown("<h1 style='text-align: center;'>Dashboard de Coyuntura Económica</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Dashboard de Coyuntura Económica</h1>",
+            unsafe_allow_html=True)
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -66,25 +67,30 @@ with contenedor.container():
     inx_1, inx_2, inx_3 = st.columns(3)
 
     with inx_1:
-        st.markdown("<h2 style='text-align: center;'>S&P 500</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center;'>S&P 500</h2>",
+                    unsafe_allow_html=True)
 
         st.plotly_chart(data_sources.get_main_index_data(
             "^GSPC", generate_random_color()), use_container_width=True)
     with inx_2:
-        st.markdown("<h2 style='text-align: center;'>NASDAQ100</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center;'>NASDAQ100</h2>",
+                    unsafe_allow_html=True)
         st.plotly_chart(data_sources.get_main_index_data(
             "^NDX", generate_random_color()), use_container_width=True)
     with inx_3:
-        st.markdown("<h2 style='text-align: center;'>IPC</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center;'>IPC</h2>",
+                    unsafe_allow_html=True)
         st.plotly_chart(data_sources.get_main_index_data(
             "^MXX", generate_random_color()), use_container_width=True)
 
     # --- Segunda fila (Noticias, currencies y stock watchlist)
-    st.markdown("<h2 style='text-align: center;'>Principales Noticias</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>Principales Noticias</h2>",
+                unsafe_allow_html=True)
+    st.multiselect("", options=NewsTopics, default=[
+                   "IPO", "Technology"], key="selected_topics")
     cols = st.columns(4)
 
-    news = data_sources.get_main_news(
-        [NewsTopics["IPO"], NewsTopics["Technology"]], 4)
+    news = data_sources.get_main_news(st.session_state.selected_topics, 4)
 
     for url, article in news.items():
         column = cols.pop()
@@ -96,7 +102,8 @@ with contenedor.container():
     global_currencies, stock_watchlist = st.columns(2)
 
     with global_currencies:
-        st.markdown("<h2 style='text-align: center;'>Monedas</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center;'>Monedas</h2>",
+                    unsafe_allow_html=True)
 
         if 'selected_currency_1' not in st.session_state:
             st.session_state.selected_currency_1 = 'USD'
@@ -122,7 +129,8 @@ with contenedor.container():
                      hide_index=True, use_container_width=True)
 
     with stock_watchlist:
-        st.markdown("<h2 style='text-align: center;'>Acciones</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center;'>Acciones</h2>",
+                    unsafe_allow_html=True)
         if 'selected_stocks_1' not in st.session_state:
             st.session_state.selected_stocks_1 = 'AMZN'
             st.session_state.selected_stocks_2 = 'GOOGL'
@@ -154,7 +162,8 @@ with contenedor.container():
         if 'selected_stock' not in st.session_state:
             initialization = True
             st.session_state.selected_stock = 'AAPL'
-        st.markdown("<h2 style='text-align: center;'>Seleccionar Acción</h2>", unsafe_allow_html=True)
+        st.markdown(
+            "<h2 style='text-align: center;'>Seleccionar Acción</h2>", unsafe_allow_html=True)
         st.selectbox(label="",
                      options=data_sources.get_stocks_catalog(), key="selected_stock")
         selected_stock_graph = st.empty()
@@ -163,7 +172,8 @@ with contenedor.container():
                 st.session_state.selected_stock, generate_random_color()), use_container_width=True)
 
     with display_news_stock:
-        st.markdown("<h2 style='text-align: center;'>Noticias de Acción Seleccionada</h2>", unsafe_allow_html=True)
+        st.markdown(
+            "<h2 style='text-align: center;'>Noticias de Acción Seleccionada</h2>", unsafe_allow_html=True)
         selected_stock_news = st.container()
         selected_stock_news.empty()
         try:
@@ -178,6 +188,7 @@ with contenedor.container():
                 f"No se encontraron noticias relacionadas con la Acción {st.session_state.selected_stock}")
 
     with cetes_plot:
-        st.markdown("<h2 style='text-align: center;'>Grafica Histórica de CETES</h2>", unsafe_allow_html=True)
+        st.markdown(
+            "<h2 style='text-align: center;'>Grafica Histórica de CETES</h2>", unsafe_allow_html=True)
         st.plotly_chart(data_sources.get_cetes_graph(
             "28", generate_random_color()), use_container_width=True)
