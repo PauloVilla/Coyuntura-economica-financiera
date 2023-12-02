@@ -1,17 +1,9 @@
+import data_sources
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 from functions import download_data, asset_allocation, backtesting
-
-
-@st.cache_data
-def tickers_class():
-    # Descargar la lista de componentes del S&P 500
-    sp500_components = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")[0]
-    # Seleccionar los primeros 200 tickers
-    top_200_tickers = sp500_components['Symbol'].tolist()
-    return sorted(top_200_tickers)
 
 
 @st.cache_data
@@ -24,7 +16,7 @@ def apply_backtesting(tickers, cap, start_dt_back, end_dt_back, start_dt, end_dt
     # Generamos el asset allocation con una tasa de 0.05 libre de riesgo
     AA = asset_allocation(data_opt, data_benchmark_opt, .05)
     # Generamos los pesos, con un n_port de 10000
-    weights_summary = AA.summary(10000)
+    weights_summary = AA.summary(1000)
 
     # Hacemos el backtesting
     # Descargamos los datos con nuevas fechas más actuales, los mismos tickers y benchmarks.
@@ -54,6 +46,11 @@ def plot_backtesting(history: pd.DataFrame):
         yaxis_title="Capital",
         showlegend=True
     )
+    # Cambiar los colores de las líneas
+    colors = ['#ff1493', '#ee1289', '#cd1076', '#fc8eac', '#68228b']  # Puedes ajustar los colores según tus preferencias
+    for i, column in enumerate(history.columns):
+        fig.update_traces(selector=dict(name=column), line=dict(color=colors[i]))
+
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -69,7 +66,7 @@ with cont.container():
 
     with param_1:
         acciones = st.multiselect(
-            "Selecciona la(s) accion(es) de tu portafolio", tickers_class())
+            "Selecciona la(s) accion(es) de tu portafolio", data_sources.get_stocks_catalog())
         # Lo convertimos a string separado por comas para que funcione
         acciones = ", ".join(acciones)
 
@@ -80,7 +77,6 @@ with cont.container():
     with param_3:
         capital = st.number_input(
             "Selecciona el capital de tu portafolio", min_value=0)
-    
     # Comenzamos con los siguientes parámetros
     param_4, param_5, param_6 = st.columns(3)
     # Obtener la fecha actual
